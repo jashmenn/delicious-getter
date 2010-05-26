@@ -1,0 +1,3 @@
+== delicious_getter
+
+A gem that provides...
