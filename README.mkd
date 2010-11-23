@@ -1,0 +1,5 @@
+== delicious_getter
+
+A hacky script that helps download and parse your delicious bookmarks. I use this to create labeled training data for keyword extraction.
+
+It's very rough and not intended for general consumption.

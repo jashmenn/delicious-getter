@@ -51,3 +51,4 @@ task :make_spec do
 end
 
 # find cache -type f -size 0 -print|xargs rm
+# time ruby lib/labeled_document_extractor.rb /Users/nmurray/programming/dotfiles/delicious/backup.xml > labeled.txt
