@@ -3,7 +3,7 @@ module DeliciousGetter
 
     def url_to_slug(url)
       url = url.sub(/http:\/\//, "")
-      url = url.gsub(/[\/?&]/, "_")
+      url = url.gsub(/[\/?&=]/, "_")
       url
     end
 

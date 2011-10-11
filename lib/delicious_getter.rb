@@ -3,6 +3,7 @@ require 'trollop'
 require 'open-uri'
 require 'magic_xml'
 require 'andand'
+require 'fileutils'
 #require 'forkoff'
 require 'delicious_getter/helpers'
 
@@ -61,11 +62,12 @@ def snapshot(url)
   $stderr.puts "Snapshot #{url}"
   cmd = "phantomjs lib/delicious_getter/javascript/rasterize.js #{url} #{filename}.pdf Letter"
   begin
-    #`#{cmd}`
-    echo cmd
+    puts cmd
+    `#{cmd}`
   rescue Exception => e
     puts "error downloading #{url}. cmd:"
     puts cmd
+    puts e
   end
 end
 
