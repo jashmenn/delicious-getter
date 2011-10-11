@@ -5,11 +5,11 @@ require 'delicious_getter/helpers'
 
 # Installation:
 #
-#     gem install magic_xml trollop forkoff
+#     gem install hpricot andand magic_xml trollop forkoff
 #
 # Get your delicious bookmark backup with:
 #
-#     curl -k --user `my_user_name:my_password` -o backup.xml -O 'https://api.del.icio.us/v1/posts/all'
+#     curl -k --user my_user_name:my_password -o backup.xml -O 'https://api.del.icio.us/v1/posts/all'
 
 opts = Trollop::options do
   version "Nate Murray 2010"

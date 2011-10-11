@@ -1,4 +1,5 @@
 $:.unshift(File.dirname(__FILE__))
+require 'rubygems'
 require 'trollop'
 require 'open-uri'
 require 'forkoff'
@@ -56,7 +57,7 @@ posts.each_with_index do |post,i|
       # todo, this is far from perfect, the nbsp's get expanded to something non-ascii and make a *bunch* of words squeezed together. that said, it is fine for now
 
       raise "bad news - there are tabs in the content" if tags =~ /\t/ || text =~ /\t/
-      puts "%s\t%s" % [tags.andand.downcase, text]
+      puts "%s\t%s\t%s" % [url, tags.andand.downcase, text]
     end
   rescue NoMethodError => e 
     $stderr.puts "Error on #{file_for(url)}"

@@ -1,5 +1,15 @@
 == delicious_getter
 
-A hacky script that helps download and parse your delicious bookmarks. I use this to create labeled training data for keyword extraction.
+A hacky script parses and downloads the html of your delicious bookmarks. I use this to create labeled training data for keyword extraction.
 
 It's very rough and not intended for general consumption.
+
+== Usage
+
+    gem install hpricot andand magic_xml trollop forkoff
+
+Download your delicious backup file:
+
+    curl -k --user myusername:mypassword -o backup.xml -O 'https://api.del.icio.us/v1/posts/all'
+
+Download the HTML with `delicious_getter.rb` and extract keywords with `labeled_document_extractor.rb`
