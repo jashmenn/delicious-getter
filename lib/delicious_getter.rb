@@ -5,11 +5,11 @@ require 'delicious_getter/helpers'
 
 # Installation:
 #
-#     gem install magic_xml trollop forkoff
+#     gem install hpricot andand magic_xml trollop forkoff
 #
 # Get your delicious bookmark backup with:
 #
-#     curl -k --user `my_user_name:my_password` -o backup.xml -O 'https://api.del.icio.us/v1/posts/all'
+#     curl -k --user my_user_name:my_password -o backup.xml -O 'https://api.del.icio.us/v1/posts/all'
 
 opts = Trollop::options do
   version "Nate Murray 2010"
@@ -20,7 +20,9 @@ Usage:
        #{$0} [options] <backup.xml>
 where [options] are:
 EOS
-
+  opt :snapshot, "take a snapshot"
+  opt :tag, "only look at urls which match a tag", :type => String
+  opt :threads, "number of threads", :type => Integer, :default => 1
 end
 
 filename = ARGV[0]
@@ -45,14 +47,36 @@ def download(url)
   end
 end
 
+def snapshot(url)
+  FileUtils.mkdir "cache" unless File.exists?("cache")
+  filename = "cache/" + url_to_slug(url)
+  return if File.exists?(filename)
+  $stderr.puts "Snapshot #{url}"
+  cmd = "phantomjs lib/delicious_getter/javascript/rasterize.js #{url} #{filename}.pdf Letter"
+  begin
+    `#{cmd}`
+  rescue Exception => e
+    puts "error downloading #{url}. cmd:"
+    puts cmd
+  end
+end
+
 urls = []
 XML.parse_as_twigs(File.new(filename)) do |node|
  next unless node.name == :post
  node.complete!
- urls << node[:href]
+ if opts[:tag]
+   urls << node[:href] if node[:tag] =~ /\b#{opts[:tag]}\b/
+ else
+   urls << node[:href]
+ end
 end
 
-urls.forkoff! :processes => 4 do |url|
-  download url
+urls.forkoff! :processes => opts[:threads] do |url|
+  if opts[:snapshot]
+    snapshot url
+  else
+    download url
+  end
 end
 
