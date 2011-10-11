@@ -1,6 +1,9 @@
+$:.unshift(File.dirname(__FILE__))
 require 'trollop'
 require 'open-uri'
-require 'forkoff'
+require 'magic_xml'
+require 'andand'
+#require 'forkoff'
 require 'delicious_getter/helpers'
 
 # Installation:
@@ -15,6 +18,10 @@ opts = Trollop::options do
   version "Nate Murray 2010"
   banner <<-EOS
 Download the files in your delicious backup.xml
+
+Example:
+
+    ruby #{$0} --snapshot --tag kickstarter ~/programming/dotfiles/delicious/pinboard-backup.xml 
 
 Usage:
        #{$0} [options] <backup.xml>
@@ -54,7 +61,8 @@ def snapshot(url)
   $stderr.puts "Snapshot #{url}"
   cmd = "phantomjs lib/delicious_getter/javascript/rasterize.js #{url} #{filename}.pdf Letter"
   begin
-    `#{cmd}`
+    #`#{cmd}`
+    echo cmd
   rescue Exception => e
     puts "error downloading #{url}. cmd:"
     puts cmd
@@ -72,11 +80,13 @@ XML.parse_as_twigs(File.new(filename)) do |node|
  end
 end
 
-urls.forkoff! :processes => opts[:threads] do |url|
+#urls.forkoff! :processes => opts[:threads] do |url|
+urls.each do |url|
   if opts[:snapshot]
     snapshot url
   else
     download url
   end
 end
+
 
